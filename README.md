@@ -1,4 +1,4 @@
-```markdown
+
 # HireTrack Frontend
 
 A modern React-based frontend application for the HireTrack Recruitment Platform. The application provides role-based access for Admins, Recruiters, and Interviewers to efficiently manage jobs, candidates, interviews, and feedback through a clean, responsive, and enterprise-grade user interface.
