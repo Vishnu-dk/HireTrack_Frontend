@@ -363,9 +363,5 @@ HireTrack Frontend developed using:
 - Framer Motion
 - Vite
 
----
 
-## License
-
-This project is intended for educational and learning purposes.
 
