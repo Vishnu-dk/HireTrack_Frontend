@@ -85,7 +85,7 @@ export default function DashboardPage() {
       .map(interview => ({
         id: interview.interviewId || interview.id,
         candidate: interview.candidateName,
-        job: interview.jobTitle || "Unassigned",
+        job: interview.job || "Unassigned",
         date: new Date(interview.scheduledAt).toLocaleString("en-US", {
           month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
         }),

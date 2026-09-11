@@ -5,7 +5,6 @@ export const userApi = {
         
         getAllRecruiter: builder.query({
           query: ({ page = 0, size = 10, status, search } = {}) => {
-            debugger
             const params = new URLSearchParams({ page, size });
             if (status) params.append('status', status);
             if (search) params.append('search', search);
@@ -15,7 +14,6 @@ export const userApi = {
 
         getAllInterviewers: builder.query({
           query: ({ page = 0, size = 10, status, search } = {}) => {
-            debugger
             const params = new URLSearchParams({ page, size });
             if (status) params.append('status', status);
             if (search) params.append('search', search);

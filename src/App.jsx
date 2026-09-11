@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Box } from "@chakra-ui/react";
-import { ProtectedRoute } from "./routes/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import TopNav from "./components/layout/TopNav";
@@ -16,10 +15,10 @@ import CandidatesPage from "./pages/CandidatesPage";
 import MyInterviewsPage from "./pages/MyInterviewsPage";
 import InterviewsPage from "./pages/InterviewsPage";
 import UserPage from "./pages/UserPage";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function AppLayout() {
   const token = useSelector((state) => state.auth.token);
-  if (!token) return <Navigate to="/login" replace />;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="neutral.50">
@@ -42,28 +41,37 @@ function Placeholder({ title }) {
   );
 }
 
+// App.jsx
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
 
+        {/* Default protected route: Any logged-in user can pass */}
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/jobs" element={<JobsPage />} />
-            <Route path="/candidates" element={<CandidatesPage />} />
-            <Route path="/interviews/my" element={<MyInterviewsPage />} />
-            <Route path="/interviews" element={<InterviewsPage />} />
-                        <Route path="/users" element={<UserPage />} />
 
-            {/* <Route path="/*" element={<Navigate to="/dashboard" replace />} /> */}
+
+            <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
+              <Route path="/users" element={<UserPage />} />
+            </Route>
+
+            <Route element={<ProtectedRoute allowedRoles={["RECRUITER", "ADMIN"]} />}>
+              <Route path="/jobs" element={<JobsPage />} />
+              <Route path="/candidates" element={<CandidatesPage />} />
+              <Route path="/interviews" element={<InterviewsPage />} />
+            </Route>
+            
+            <Route element={<ProtectedRoute allowedRoles={["INTERVIEWER"]} />}>
+            <Route path="/interviews/my" element={<MyInterviewsPage />} />
+            </Route>
+
           </Route>
         </Route>
-        <Route
-          path="/unauthorized"
-          element={<Placeholder title="Access Denied" />}
-        />
+
+        <Route path="/unauthorized" element={<Placeholder title="Access Denied" />} />
       </Routes>
     </BrowserRouter>
   );

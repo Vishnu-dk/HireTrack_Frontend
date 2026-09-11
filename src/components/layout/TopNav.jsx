@@ -50,7 +50,6 @@ const ROLE_BADGE = {
 
 export default function TopNav() {
   const { role, email } = useSelector((state) => state.auth);
-  debugger;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
