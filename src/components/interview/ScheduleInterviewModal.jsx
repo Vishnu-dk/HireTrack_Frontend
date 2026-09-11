@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
   Button, FormControl, FormLabel, Select, Input, FormErrorMessage, VStack, useToast, Alert, AlertIcon
@@ -16,6 +16,14 @@ const interviewSchema = z.object({
 });
 
 export default function ScheduleInterviewModal({ isOpen, onClose, candidates, interviewers }) {
+
+  useEffect(() => {
+  if (isOpen) {
+    console.log('👥 Interviewers Data:', interviewers);
+    console.log('👥 Is Array?', Array.isArray(interviewers));
+    console.log('👥 Has .content?', interviewers?.content);
+  }
+}, [isOpen, interviewers]);
   const toast = useToast();
   const [scheduleInterview, { isLoading, error }] = useScheduleInterviewMutation();
   
@@ -73,9 +81,11 @@ export default function ScheduleInterviewModal({ isOpen, onClose, candidates, in
                   borderRadius="lg"
                   onChange={(e) => setValue('interviewerId', e.target.value ? parseInt(e.target.value) : '')}
                 >
-                  {interviewers?.map(i => (
-                    <option key={i.id} value={i.id}>{i.fullName} ({i.email})</option>
-                  ))}
+    {(interviewers?.content || interviewers || [])?.map(i => (
+      <option key={i.id} value={i.id}>
+        {i.fullName} ({i.email})
+      </option>
+    ))}
                 </Select>
                 <FormErrorMessage>{errors.interviewerId?.message}</FormErrorMessage>
               </FormControl>

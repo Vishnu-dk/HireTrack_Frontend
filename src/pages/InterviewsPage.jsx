@@ -31,6 +31,7 @@ import {
   useGetAllInterviewsQuery,
   useCancelInterviewMutation,
   useGetCandidatesQuery,
+  useGetAllInterviewersQuery,
 } from "../api/api";
 import ScheduleInterviewModal from "../components/interview/ScheduleInterviewModal";
 import RescheduleInterviewModal from "../components/interview/RescheduleInterviewModal";
@@ -76,6 +77,7 @@ export default function InterviewsPage() {
   );
 
   const { data: candidates } = useGetCandidatesQuery({ size: 100 });
+  const{data:interviewer}=useGetAllInterviewersQuery({size:100});
 
   const bg = useColorModeValue("neutral.50", "neutral.900");
   const cardBg = useColorModeValue("white", "neutral.800");
@@ -130,9 +132,7 @@ export default function InterviewsPage() {
   const totalPages = interviews?.totalPages || 0;
   const totalElements = interviews?.totalElements || 0;
 
-  const modalInterviewers = [
-    { id: 3, fullName: "Anu Sharma", email: "interviewer@test.com" },
-  ];
+
 
   return (
     <Box minH="100vh" px={{ base: 4, md: 6, lg: 8 }} py={6} w="full">
@@ -616,14 +616,14 @@ export default function InterviewsPage() {
         isOpen={scheduleModalOpen}
         onClose={() => setScheduleModalOpen(false)}
         candidates={candidates}
-        interviewers={modalInterviewers}
+        interviewers={interviewer}
       />
       <RescheduleInterviewModal
         isOpen={rescheduleModal.open}
         onClose={() => setRescheduleModal({ open: false, interview: null })}
         interview={rescheduleModal.interview}
         candidates={candidates}
-        interviewers={modalInterviewers}
+        interviewers={interviewer}
       />
     </Box>
   );

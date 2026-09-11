@@ -3,7 +3,7 @@ export const userApi = {
     api.injectEndpoints({
       endpoints: (builder) => ({
         
-        getAllrecruiter: builder.query({
+        getAllRecruiter: builder.query({
           query: ({ page = 0, size = 10, status, search } = {}) => {
             debugger
             const params = new URLSearchParams({ page, size });
@@ -13,7 +13,7 @@ export const userApi = {
           providesTags: ['Recruiters'],
         }),
 
-        getAllinterviewers: builder.query({
+        getAllInterviewers: builder.query({
           query: ({ page = 0, size = 10, status, search } = {}) => {
             debugger
             const params = new URLSearchParams({ page, size });
@@ -29,6 +29,6 @@ export const userApi = {
 };
 
 export const {
-    useGetAllrecruiterQuery,
-    useGetAllinterviewersQuery
+    useGetAllRecruiterQuery,
+    useGetAllInterviewersQuery
 } = userApi;

@@ -54,6 +54,6 @@ export const {  useLoginMutation,
                 useGetInterviewFeedbackQuery,
                 useGetCandidateFeedbacksQuery,
                 useRescheduleInterviewMutation,
-                useGetAllrecruiterQuery,
-                useGetAllinterviewersQuery
+                useGetAllRecruiterQuery,
+                useGetAllInterviewersQuery
 } = api;

@@ -28,7 +28,7 @@ import {
   TabPanel,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useGetAllrecruiterQuery, useGetAllinterviewersQuery } from "../api/api";
+import { useGetAllRecruiterQuery, useGetAllInterviewersQuery } from "../api/api";
 import Pagination from "../components/common/Pagination";
 
 export default function UserPage() {
@@ -59,7 +59,7 @@ export default function UserPage() {
     data: recruiterData, 
     isLoading: isLoadingRecruiters, 
     error: recruiterError 
-  } = useGetAllrecruiterQuery({
+  } = useGetAllRecruiterQuery({
     page,
     size: 10,
     status: statusFilter || undefined,
@@ -70,7 +70,7 @@ export default function UserPage() {
     data: interviewerData, 
     isLoading: isLoadingInterviewers, 
     error: interviewerError 
-  } = useGetAllinterviewersQuery({
+  } = useGetAllInterviewersQuery({
     page,
     size: 10,
     status: statusFilter || undefined,
