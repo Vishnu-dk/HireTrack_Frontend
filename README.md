@@ -340,6 +340,10 @@ Ensure the backend server is running before accessing the frontend application.
 
 
 
+https://github.com/user-attachments/assets/6f0c0d52-95c0-40b3-abd9-1caebbf4e8a7
+
+
+
 
 
 
