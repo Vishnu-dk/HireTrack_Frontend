@@ -15,6 +15,7 @@ import JobsPage from "./pages/JobsPage";
 import CandidatesPage from "./pages/CandidatesPage";
 import MyInterviewsPage from "./pages/MyInterviewsPage";
 import InterviewsPage from "./pages/InterviewsPage";
+import UserPage from "./pages/UserPage";
 
 function AppLayout() {
   const token = useSelector((state) => state.auth.token);
@@ -54,6 +55,7 @@ export default function App() {
             <Route path="/candidates" element={<CandidatesPage />} />
             <Route path="/interviews/my" element={<MyInterviewsPage />} />
             <Route path="/interviews" element={<InterviewsPage />} />
+                        <Route path="/users" element={<UserPage />} />
 
             {/* <Route path="/*" element={<Navigate to="/dashboard" replace />} /> */}
           </Route>

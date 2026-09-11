@@ -32,7 +32,7 @@ import {
   useCancelInterviewMutation,
   useGetCandidatesQuery,
 } from "../api/api";
-import ScheduleInterviewModal from "../components/interviews/ScheduleInterviewModal";
+import ScheduleInterviewModal from "../components/interview/ScheduleInterviewModal";
 import RescheduleInterviewModal from "../components/interview/RescheduleInterviewModal";
 import Pagination from "../components/common/Pagination";
 import InterviewStatusBadge from "../components/interview/InterviewStatusBadge";

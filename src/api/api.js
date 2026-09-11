@@ -7,6 +7,7 @@ import { jobsApi } from './jobsApi';
 import { candidatesApi } from './candidatesApi';
 import { interviewsApi } from './interviewApi';
 import { feedbackApi } from './feedbackApi';
+import { userApi } from './userApi';
 
 export const api = createApi({
   reducerPath: 'api',
@@ -20,7 +21,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Auth', 'Jobs', 'Candidates', 'Interviews', 'Feedback', 'Dashboard'],
+  tagTypes: ['Auth', 'Jobs', 'Candidates', 'Interviews', 'Feedback', 'Dashboard','Recruiter','Interviewer'],
   endpoints: () => ({}),
 });
 
@@ -31,10 +32,11 @@ jobsApi.injectInto(api);
 candidatesApi.injectInto(api); 
 interviewsApi.injectInto(api);   
 feedbackApi.injectInto(api);
+userApi.injectInto(api);
 
-export const { useLoginMutation,
-               useGetDashboardQuery ,
-                 useGetAllJobQuery,
+export const {  useLoginMutation,
+                useGetDashboardQuery ,
+                useGetAllJobQuery,
                 useGetJobQuery, 
                 useCreateJobMutation,
                 useUpdateJobMutation,
@@ -43,12 +45,15 @@ export const { useLoginMutation,
                 useCreateCandidateMutation,
                 useUpdateCandidateStatusMutation,
                 useUploadResumeMutation,
-              useScheduleInterviewMutation,
-              useGetMyInterviewsQuery,
-              useCompleteInterviewMutation,
-              useCancelInterviewMutation,
-              useGetAllInterviewsQuery,
-              useSubmitFeedbackMutation,
-  useGetInterviewFeedbackQuery,
-  useGetCandidateFeedbacksQuery,
-useRescheduleInterviewMutation} = api;
+                useScheduleInterviewMutation,
+                useGetMyInterviewsQuery,
+                useCompleteInterviewMutation,
+                useCancelInterviewMutation,
+                useGetAllInterviewsQuery,
+                useSubmitFeedbackMutation,
+                useGetInterviewFeedbackQuery,
+                useGetCandidateFeedbacksQuery,
+                useRescheduleInterviewMutation,
+                useGetAllrecruiterQuery,
+                useGetAllinterviewersQuery
+} = api;

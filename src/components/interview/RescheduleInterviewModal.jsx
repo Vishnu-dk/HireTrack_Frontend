@@ -13,8 +13,7 @@ import { useRescheduleInterviewMutation } from '../../api/api';
 const rescheduleSchema = z.object({
   scheduledAt: z.string().min(1, 'Date & time is required'),
   durationMinutes: z.number().min(15).max(120).default(45),
-  // Optional: allow changing interviewer during reschedule
-  // interviewerId: z.number({ required_error: 'Interviewer is required' }),
+
 });
 
 export default function RescheduleInterviewModal({ isOpen, onClose, interview, candidates, interviewers }) {
@@ -26,20 +25,19 @@ export default function RescheduleInterviewModal({ isOpen, onClose, interview, c
     defaultValues: { 
       scheduledAt: '', 
       durationMinutes: 45,
-      // interviewerId: ''
+
     }
   });
 
 useEffect(() => {
   if (isOpen && interview?.scheduledAt) {
-    // Backend returns: "2026-10-20T14:30:00" (ISO-like, local time)
-    // datetime-local input needs: "2026-10-20T14:30" (no seconds)
+
     
     const backendDate = interview.scheduledAt;
     
-    // Remove seconds if present, keep YYYY-MM-DDTHH:mm
+
     const inputValue = backendDate.length > 16 
-      ? backendDate.slice(0, 16)  // "2026-10-20T14:30"
+      ? backendDate.slice(0, 16)  
       : backendDate;
     
     setValue('scheduledAt', inputValue);
@@ -51,16 +49,15 @@ const onSubmit = async (data) => {
   if (!interview?.interviewId) return;
   
   try {
-    // 🎯 datetime-local returns "YYYY-MM-DDTHH:mm"
-    // Backend expects "YYYY-MM-DDTHH:mm:ss" (local time, no Z)
+
     
     const formattedDateTime = data.scheduledAt.includes('T') 
-      ? `${data.scheduledAt}:00`  // Append seconds
+      ? `${data.scheduledAt}:00` 
       : data.scheduledAt;
     
     await reschedule({ 
-      id: interview.interviewId, 
-      newScheduledAt: formattedDateTime,   // ✅ Exact format match
+      id: interview.interviewId,
+      newScheduledAt: formattedDateTime,   
       newDuration: Number(data.durationMinutes)
     }).unwrap();
     
@@ -126,25 +123,7 @@ const onSubmit = async (data) => {
                 />
               </FormControl>
 
-              {/* Interviewer Select (optional: allow changing) */}
-              {/* 
-              <FormControl isInvalid={!!errors.interviewerId}>
-                <FormLabel fontSize="13px" fontWeight="semibold">Interviewer</FormLabel>
-                <Select 
-                  placeholder="Select interviewer" 
-                  focusBorderColor="brand.500" 
-                  bg="neutral.50" 
-                  borderRadius="lg"
-                  defaultValue={interview?.interviewerId}
-                  onChange={(e) => setValue('interviewerId', e.target.value ? parseInt(e.target.value) : '')}
-                >
-                  {interviewers?.map(i => (
-                    <option key={i.id} value={i.id}>{i.fullName} ({i.email})</option>
-                  ))}
-                </Select>
-                <FormErrorMessage>{errors.interviewerId?.message}</FormErrorMessage>
-              </FormControl>
-              */}
+
 
               {/* Date & Time */}
               <FormControl isInvalid={!!errors.scheduledAt}>

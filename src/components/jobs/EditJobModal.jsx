@@ -1,35 +1,52 @@
+import { useEffect } from 'react';
 import {
   Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
-  Button, FormControl, FormLabel, Input, Textarea, FormErrorMessage, VStack, HStack, Box, useToast
+  Button, FormControl, FormLabel, Input, Textarea, FormErrorMessage, VStack, useToast
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useCreateJobMutation } from '../../api/api';
+import { useUpdateJobMutation } from '../../api/api';
 
+// Schema based strictly on JobRequestDto
 const jobSchema = z.object({
-  title: z.string().min(3, 'Title must be at least 3 characters'),
-  department: z.string().min(2, 'Department is required'),
-  description: z.string().min(10, 'Description must be at least 10 characters'),
+  title: z.string()
+    .min(3, 'Title must be at least 3 characters')
+    .max(50, 'Title must be under 50 characters'),
+  description: z.string().optional(),
+  department: z.string()
+    .max(50, 'Department must be under 50 characters')
+    .optional(),
 });
 
-export default function CreateJobModal({ isOpen, onClose }) {
+export default function EditJobModal({ isOpen, onClose, job }) {
   const toast = useToast();
-  const [createJob, { isLoading }] = useCreateJobMutation();
+  const [updateJob, { isLoading }] = useUpdateJobMutation();
   
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: zodResolver(jobSchema),
-    defaultValues: { title: '', department: '', description: '' }
+    defaultValues: { title: '', description: '', department: '' }
   });
+
+  // ✅ Pre-fill form when modal opens with job data
+  useEffect(() => {
+    if (isOpen && job) {
+      reset({
+        title: job.title || '',
+        description: job.description || '',
+        department: job.department || ''
+      });
+    }
+  }, [isOpen, job, reset]);
 
   const onSubmit = async (data) => {
     try {
-      await createJob({ ...data, status: 'OPEN' }).unwrap();
-      toast({ title: 'Job created successfully', status: 'success', duration: 3000, isClosable: true });
-      reset();
+      // Backend expects: { id, title, description, department }
+      await updateJob({ id: job.id, ...data }).unwrap();
+      toast({ title: 'Job updated successfully', status: 'success', duration: 3000, isClosable: true });
       onClose();
     } catch (err) {
-      const msg = err.data?.message || err.error || 'Failed to create job';
+      const msg = err.data?.message || err.error || 'Failed to update job';
       toast({ title: 'Error', description: msg, status: 'error', duration: 4000, isClosable: true });
     }
   };
@@ -51,7 +68,7 @@ export default function CreateJobModal({ isOpen, onClose }) {
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader fontSize="lg" fontWeight="bold" color="neutral.800" pb={2}>
-            Create New Job
+            Edit Job
           </ModalHeader>
           <ModalCloseButton />
           
@@ -81,18 +98,17 @@ export default function CreateJobModal({ isOpen, onClose }) {
                 <FormErrorMessage fontSize="12px">{errors.department?.message}</FormErrorMessage>
               </FormControl>
 
-              <FormControl isInvalid={!!errors.description}>
+              <FormControl>
                 <FormLabel fontSize="13px" fontWeight="semibold" color="neutral.800">Description</FormLabel>
                 <Textarea 
                   {...register('description')} 
-                  placeholder="Brief overview of responsibilities, requirements, and expectations..." 
+                  placeholder="Job responsibilities and requirements..." 
                   rows={4} 
                   focusBorderColor="brand.500" 
                   resize="none"
                   bg="neutral.50"
                   borderRadius="lg"
                 />
-                <FormErrorMessage fontSize="12px">{errors.description?.message}</FormErrorMessage>
               </FormControl>
             </VStack>
           </ModalBody>
@@ -113,12 +129,12 @@ export default function CreateJobModal({ isOpen, onClose }) {
               bgGradient="linear(to-br, brand.500, brand.700)"
               color="white"
               isLoading={isLoading}
-              loadingText="Creating..."
+              loadingText="Updating..."
               borderRadius="xl"
               _hover={{ transform: 'translateY(-1px)', shadow: 'md' }}
               transition="all 0.2s ease"
             >
-              Create Job
+              Save Changes
             </Button>
           </ModalFooter>
         </form>

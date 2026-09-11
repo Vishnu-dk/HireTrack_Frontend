@@ -70,9 +70,9 @@ export default function SubmitFeedbackModal({ isOpen, onClose, interviewId }) {
             <FormControl>
               <FormLabel fontSize="13px" fontWeight="semibold">Recommendation</FormLabel>
               <Select value={rec} onChange={e => setRec(e.target.value)} borderRadius="lg" bg="neutral.50">
-                <option value="SELECT">✅ Select / Hire</option>
-                <option value="HOLD">⏸️ Hold / Maybe</option>
-                <option value="REJECT">❌ Reject</option>
+                <option value="SELECT">✓ Select / Hire</option>
+                <option value="HOLD">⏸ Hold/ Maybe</option>
+                <option value="REJECT">✗ Reject</option>
               </Select>
             </FormControl>
 
