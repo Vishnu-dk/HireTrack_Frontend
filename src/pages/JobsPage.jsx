@@ -27,6 +27,7 @@ import {
   CardBody,
   Divider,
   useColorModeValue,
+  Portal,
 } from "@chakra-ui/react";
 import { AddIcon, EditIcon } from "@chakra-ui/icons";
 import { useGetAllJobQuery, useUpdateJobStatusMutation } from "../api/api";
@@ -58,7 +59,7 @@ export default function JobsPage() {
   const handleStatusChange = async (jobId, newStatus) => {
     try {
       await updateStatus({ id: jobId, status: newStatus }).unwrap();
-      refetch(); // ✅ Instantly refresh table after status change
+      refetch(); 
     } catch (err) {
       console.error("Failed to update status:", err);
     }
@@ -148,7 +149,7 @@ export default function JobsPage() {
 
           {/* Table */}
           <Card borderRadius="xl" shadow="sm" borderWidth="1px" borderColor="neutral.200" bg={cardBg} overflow="hidden">
-            <Box overflowX="auto">
+            <Box overflowX="auto" overflowY="auto" >
               <Table variant="simple">
                 <Thead bg="neutral.50">
                   <Tr>
@@ -163,7 +164,6 @@ export default function JobsPage() {
                 <Tbody>
                   {jobs.length === 0 ? (
                     <Tr>
-                      {/* ✅ Fixed: colSpan=6 to match header count */}
                       <Td colSpan={6} textAlign="center" py={8} color="neutral.500">
                         No jobs found. Try adjusting your filters.
                       </Td>
@@ -180,11 +180,12 @@ export default function JobsPage() {
                         <Td><Text fontSize="13px" color="neutral.700">{job.department}</Text></Td>
                         <Td>
                           {role === "ADMIN" || role === "RECRUITER" ? (
-                            <Menu closeOnSelect>
+                            <Menu closeOnSelect >
                               <MenuButton as={Button} variant="ghost" size="sm" p={0}>
                                 <StatusBadge status={job.status} />
                               </MenuButton>
-                              <MenuList minWidth="150px" shadow="lg" borderColor="neutral.200">
+                              <Portal>
+                              <MenuList minWidth="150px" shadow="lg" borderColor="neutral.200" portalProps={{ appendToParentPortal: true }}>
                                 <MenuItem fontSize="12px" onClick={() => handleStatusChange(job.id, "OPEN")} isDisabled={job.status === "OPEN"} closeOnSelect>
                                   <StatusBadge status="OPEN" size="xs" />
                                 </MenuItem>
@@ -195,6 +196,8 @@ export default function JobsPage() {
                                   <StatusBadge status="CLOSED" size="xs" />
                                 </MenuItem>
                               </MenuList>
+                              </Portal>
+
                             </Menu>
                           ) : (
                             <StatusBadge status={job.status} />
@@ -231,7 +234,6 @@ export default function JobsPage() {
         </VStack>
       </Box>
 
-      {/* ✅ Modals moved outside Card to prevent overflow/z-index clipping */}
       <CreateJobModal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} />
       <EditJobModal 
         isOpen={editModal.open} 
